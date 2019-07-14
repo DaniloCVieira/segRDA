@@ -1,0 +1,228 @@
+x<-ws10
+attr(ws10,"params")<-NULL
+attr(x,"class")<-NULL
+class(x)<-'data.frame'
+head(ws10)
+x<-extract(ws10)
+attr(x,"params")<-NULL
+attr(x,"class")<-NULL
+class(x)<-'data.frame'
+x<-data.frame(x[c(1:4)])
+print(x)
+
+{
+
+  rm(list=ls())
+  require(segRDA)
+
+  x<-sim3$envi ## matrix of explanatory variables
+  y<-sim3$comm
+
+  sim3o<-OrdData(x=x,y=y, axis=1)
+  xo<-sim3o$xo ## ordered explanatory matrix
+  yo<-sim3o$yo
+
+  ws20<-SMW(yo=yo,ws=20, n.rand=5) # single window size
+
+
+  ws20_dp<-extract(ws20, sig="tail1", seq.sig=20)
+
+  ws20_dp[1:6,]
+  pool<-SMW(yo=yo,ws=c(50,60), n.rand=10)
+  extract(pool, w=50, index="sd")
+
+
+  smw=pool
+  w=50
+  sig="tail1"
+  z=1.85
+  BPs=NULL
+  seq.sig=100
+  w.effect=F
+  values=c("zscore","diss")
+  pchs=c(16,16,17)
+  cols=c("black","red","blue")
+  bg_bp=FALSE
+  bg_alpha=0.05
+  wcols="rainbow"
+  legend=TRUE
+  argg<-list(las=2)
+  input<-pool
+  index="osd"
+  peaks.choice="max"
+}
+ws20_dp<-extract(ws20)
+
+
+extract(pool,w=50,index="osd")
+rm(list=ls())
+require(segRDA)
+require(Rdpack)
+## Install Rtools from https://cran.r-project.org/bin/windows/Rtools/
+# 1. Iniciar nova sessão e escolher "pacote"
+# 2. Install de packages/load the required packages.
+?Dprofile
+
+
+install.packages("devtools")
+install.packages("usethis")
+R.version.string
+
+library('devtools')
+library('usethis')
+
+install.packages("roxygen2")
+library(roxygen2)
+install_github("devtools", 'hodley')
+search()
+
+# 3. Go to Tools>Project Options>Build Tools and choose "package" option.
+#   tick the "Generate documentation with Roxygen", and tick all boxes options
+
+load(SS)
+?par
+# 4. Taking data to the package: Load the data(s)
+require(vegan)
+devtools::use_data_raw()
+devtools::use_data(nema,overwrite = TRUE)
+devtools::use_data(sim2,overwrite = TRUE)
+devtools::use_data(sim1,overwrite = TRUE)
+getwd()
+##5. Check the Help files
+roxygen2::roxygenise()
+?OrdData
+?SMW
+?extract
+?plot.smw
+?pwRDA
+?nema
+?sim1
+?sim2
+?sim3
+rm(list=ls())
+library(segRDA)
+devtools::check()
+segRDA:::plot.dp
+roxygen2::roxygenize()
+?extract
+?plot.smw
+
+
+## 6. creates vignette folder
+use_vignette("segRDA")
+
+## 7. Build vignette in the doc folder and site to
+
+devtools::build_vignettes()
+#pkgdown::build_site()
+
+
+## 8. Build manual to doc
+library("qpdf")
+devtools::build_manual()
+
+## 9 Build readme - leave only the md file in the root directory
+use_readme_md ('segRDA')
+use_package_doc()
+
+
+## 10 test package -
+library('qpdf')
+devtools::check()
+
+## 11. Build source package
+devtools::build()
+
+
+
+devtools::check()
+
+?check_built
+
+
+
+getwd()
+devtools::build_vignettes("segRDA")
+library(devtools)
+library(Rd2md)
+library(usethis)
+
+devtools::install_github("DaniloCVieira/segRDA")
+
+
+
+
+
+
+
+
+
+rm(list=ls())
+use_testthat() ## testa alguma coisa
+document() ## generate the last rmd
+use_package_doc() ## global documentation
+
+getwd()
+
+# 11 - Push to git hub
+options(pkgType = "binary")
+
+
+devtools::install_github("hadley/devtools")
+devtools::install_github("tinytex")
+
+
+?remote_add
+use_github_links()
+devtools::use_git(pkg = as.package("C:/Users/Danilo/OneDrive/DOUTORADO/03 - RESULTADOS/Routine MS3/Package_tesePhD/segRDA"))
+devtools::use_github_links(pkg = "C:/Users/Danilo/OneDrive/DOUTORADO/03 - RESULTADOS/Routine MS3/Package_tesePhD/segRDA")
+
+cat("GITHUB_PAT=97b305e603f549ef14a49a4ed355657df54672ab\n",
+    file=file.path(normalizePath("~/"), ".Renviron"),
+    append=TRUE)
+Sys.getenv()
+Sys.getenv("GITHUB_PAT")
+
+
+
+
+
+
+
+
+
+git init
+git add .
+git config user.email "vieiradc@yahoo.com.br"
+git commit -m "First commit package"
+git remote add origin https://github.com/DaniloCVieira/segRDA.git
+git push -f origin master
+devtools::install_github("DaniloCVieira/segRDA")
+
+git init
+git add .
+git config user.email "vieiradc@yahoo.com.br"
+git commit -m "First commit package"
+git push -f origin master
+
+devtools::build_manual(pkg = "segRDA", path = NULL)
+
+library(devtools)
+install.packages('pkgbuild')
+library('pkgbuild')
+
+devtools::find_rtools()
+Sys.getenv()['PATH']
+
+
+install.packages("installr")
+
+
+install.Rtools()
+1
+
+cat("PATH=97b305e603f549ef14a49a4ed355657df54672ab\n",
+    file=file.path(normalizePath("~/"), ".Renviron"),
+    append=TRUE)
+
+devtools::install_github("hadley/pkgdown")
