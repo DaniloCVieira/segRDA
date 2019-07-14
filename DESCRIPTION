@@ -9,7 +9,7 @@ Description: 'segRDA' is designed to model non-continuous linear responses of ec
 Depends:
     R (>= 2.15),
     vegan (>= 2.4)
-License: GPL-3
+License:  MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
