@@ -1,14 +1,14 @@
 Package: segRDA 
-Version: 0.0.0.9000
+Version: 1.0.0
 Date: 2019-07-06
-Title:  Modeling Non-Continuous Linear Responses of Ecological Data
+Title: Modeling Non-Continuous Linear Responses of Ecological Data
 Author: Danilo C Vieira <vieiradc@yahoo.com.br>, Gustavo Fonseca <gfonseca.unifesp@gmail.com>, and Fabio Cop Ferreira <fabiocferreira.unifesp@gmail.com>, with contributions from Marco Colossi Brustolin.
 Maintainer: Danilo C Vieira <vieiradc@yahoo.com.br>
 Description: Tools for modeling non-continuous linear responses of ecological communities to environmental data through three steps: (1) data ordering (function 'OrdData'), (2) split-moving-window analysis (function 'SMW') and (3) piecewise redundancy analysis (function 'pwRDA').
 Depends:
     R (>= 2.15),
     vegan (>= 2.4)
-License:  MIT + file LICENSE
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
