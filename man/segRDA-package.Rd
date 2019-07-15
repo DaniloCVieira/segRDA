@@ -4,9 +4,9 @@
 \name{segRDA-package}
 \alias{segRDA}
 \alias{segRDA-package}
-\title{segRDA: An R package for performing piecewise redundancy analysis}
+\title{segRDA: Modeling Non-Continuous Linear Responses of Ecological Data}
 \description{
-'segRDA' is designed to model non-continuous linear responses of ecological communities to environmental data  through three steps: (1) data ordering (function 'OrdData'), (2) split-moving-window analysis (function 'SMW') and (3) piecewise redundancy analysis (function 'pwRDA').
+Tools for modeling non-continuous linear responses of ecological communities to environmental data through three steps: (1) data ordering (function 'OrdData'), (2) split-moving-window analysis (function 'SMW') and (3) piecewise redundancy analysis (function 'pwRDA').
 }
 \seealso{
 Useful links:
@@ -14,10 +14,6 @@ Useful links:
   \item \url{https://github.com/DaniloCVieira/segRDA}
   \item Report bugs at \url{https://github.com/DaniloCVieira/segRDA/issues}
 }
-
-}
-\author{
-\strong{Maintainer}: Danilo Candido Vieira \email{vieiradc@yahoo.com.br}
 
 }
 \keyword{internal}

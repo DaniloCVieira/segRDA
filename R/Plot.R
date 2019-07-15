@@ -31,12 +31,15 @@
 #' @importFrom grDevices adjustcolor
 #' @importFrom graphics lines par plot plot.default points rect
 #' @examples
+#'\dontrun{
 #' data(sim1)
 #' sim1o<-OrdData(sim1$envi,sim1$comm)
 #' ws20<-SMW(yo=sim1o$yo,ws=20, n.rand=10)
 #' plot(ws20)
 #' pool<-SMW(yo=sim1o$yo,ws=c(20,30,40), n.rand=10)
-#' plot(pool,w.effect = TRUE)
+#' plot(pool,w.effect = TRUE)}
+
+
 
 
 

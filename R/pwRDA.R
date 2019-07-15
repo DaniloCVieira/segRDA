@@ -12,10 +12,12 @@
 #'   \item \code{..$rda.pw}: pw model cca object, which is described separately in vegan::\code{\link[vegan]{cca.object}}
 #' }
 #' @examples
+#' \dontrun{
 #' data(sim1)
 #' sim1o<-OrdData(sim1$envi,sim1$comm)
 #' pool<-SMW(sim1o$yo, ws=c(10,20,30), n.rand=10)
 #' sim1.pw<-pwRDA(sim1o$xo,sim1o$yo, BPs=bp(extract(pool)))
+#'}
 #' @author Danilo Candido Vieira
 #' @import vegan
 #' @export

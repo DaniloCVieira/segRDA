@@ -38,12 +38,14 @@ Available methods for class \code{"smw"} are \code{print}, \code{extract} and \c
 Function \code{SMW} performs split moving window analysis (SMW) with randomizations tests. It may compute dissimilarities for a single window size or  for several windows sizes.
 }
 \examples{
+\dontrun{
 data(sim1)
 sim1o<-OrdData(sim1$envi,sim1$comm)
-ws20<-SMW(yo=sim1o$yo,ws=20)
+ws20<-SMW(yo=sim1o$yo,ws=20, n=10)
 head(print(ws20))
-pool<-SMW(yo=sim1o$yo,ws=c(10,20,30))
+pool<-SMW(yo=sim1o$yo,ws=c(10,20,30), n.rand=10)
 head(print(pool))
+}
 }
 \references{
 \itemize{

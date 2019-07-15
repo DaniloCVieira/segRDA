@@ -63,12 +63,13 @@ Plot results from \code{smw} and \code{dp} objects. The command is a shortcut fo
 If \code{bg} is not \code{NULL}, the attribute \code{params$bg} is added to the returned \code{dp}. This attribute contains the  sample colors used by the argument \code{bg}. The auxilary method \code{bgDP} can be used for accessing this color vector.
 }
 \examples{
+\dontrun{
 data(sim1)
 sim1o<-OrdData(sim1$envi,sim1$comm)
 ws20<-SMW(yo=sim1o$yo,ws=20, n.rand=10)
 plot(ws20)
 pool<-SMW(yo=sim1o$yo,ws=c(20,30,40), n.rand=10)
-plot(pool,w.effect = TRUE)
+plot(pool,w.effect = TRUE)}
 }
 \seealso{
 \code{\link{SMW}}, \code{\link{extract}}.

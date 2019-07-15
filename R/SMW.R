@@ -30,12 +30,14 @@
 #'   \item Cornelius, J. M., and J. F. Reynolds. 1991. On Determining the Statistical Significance of Discontinuities with Ordered Ecological Data. Ecology 72:2057–2070.
 #' }
 #' @examples
+#' \dontrun{
 #' data(sim1)
 #' sim1o<-OrdData(sim1$envi,sim1$comm)
-#' ws20<-SMW(yo=sim1o$yo,ws=20)
+#' ws20<-SMW(yo=sim1o$yo,ws=20, n=10)
 #' head(print(ws20))
-#' pool<-SMW(yo=sim1o$yo,ws=c(10,20,30))
+#' pool<-SMW(yo=sim1o$yo,ws=c(10,20,30), n.rand=10)
 #' head(print(pool))
+#' }
 #' @export
 #' @import vegan
 SMW<-function(yo,ws, dist="bray",rand=c("shift","plot"), n.rand=99)

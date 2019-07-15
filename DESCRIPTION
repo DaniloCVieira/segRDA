@@ -1,11 +1,10 @@
-Package: segRDA
-Version: 1.0.0
+Package: segRDA 
+Version: 0.0.0.9000
 Date: 2019-07-06
-Title: An R package for performing piecewise redundancy analysis
-Authors@R: person("Danilo Candido", "Vieira", email = "vieiradc@yahoo.com.br",
-                  role = c("aut", "cre"))
+Title:  Modeling Non-Continuous Linear Responses of Ecological Data
+Author: Danilo C Vieira <vieiradc@yahoo.com.br>, Gustavo Fonseca <gfonseca.unifesp@gmail.com>, and Fabio Cop Ferreira <fabiocferreira.unifesp@gmail.com>, with contributions from Marco Colossi Brustolin.
 Maintainer: Danilo C Vieira <vieiradc@yahoo.com.br>
-Description: 'segRDA' is designed to model non-continuous linear responses of ecological communities to environmental data  through three steps: (1) data ordering (function 'OrdData'), (2) split-moving-window analysis (function 'SMW') and (3) piecewise redundancy analysis (function 'pwRDA').
+Description: Tools for modeling non-continuous linear responses of ecological communities to environmental data through three steps: (1) data ordering (function 'OrdData'), (2) split-moving-window analysis (function 'SMW') and (3) piecewise redundancy analysis (function 'pwRDA').
 Depends:
     R (>= 2.15),
     vegan (>= 2.4)
