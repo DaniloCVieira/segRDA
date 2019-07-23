@@ -61,12 +61,16 @@ If the \code{smw} object contains results from multiple window sizes, the DP tab
 The argument \code{w} is optional. If the \code{smw} object is length 1, \code{w} is ignored. If \code{length(smw)>1} and \code{w} is \code{NULL}, the function will extract the dissimilarity profile averaged over the set of window sizes.
 }
 \examples{
-\dontrun{
 data(sim1)
 sim1o<-OrdData(sim1$envi,sim1$comm)
-ws20<-SMW(yo=sim1o$yo,ws=20, n.rand=99)
-ws20_dp<-extract(ws20)
-head(ws20)
+\dontshow{
+ws50<-SMW(yo=sim1o$yo,ws=50, n.rand=3)
+extract(ws50)
+}
+\donttest{
+ws50<-SMW(yo=sim1o$yo,ws=50)
+ws50_dp<-extract(ws50)
+head(ws50_dp)
 }
 }
 \seealso{

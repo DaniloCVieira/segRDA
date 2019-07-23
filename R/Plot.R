@@ -26,23 +26,24 @@
 #' @seealso \code{\link{SMW}}, \code{\link{extract}}.
 #' @param legend Logical. Should a default legend appear?
 #' @param ... Further graphical parameters.
-#' @aliases plot.smw plot.dp bgDP
+#' @aliases plot.smw bgDP
 #' @author Danilo Candido Vieira
 #' @importFrom grDevices adjustcolor
 #' @importFrom graphics lines par plot plot.default points rect
 #' @examples
-#'\dontrun{
 #' data(sim1)
 #' sim1o<-OrdData(sim1$envi,sim1$comm)
-#' ws20<-SMW(yo=sim1o$yo,ws=20, n.rand=10)
+#' \dontshow{
+#' pool<-SMW(yo=sim1o$yo,ws=c(40,50), n.rand=3)
+#' plot(pool)
+#' }
+#' \donttest{
+#' ws20<-SMW(yo=sim1o$yo,ws=20)
+#' pool<-SMW(yo=sim1o$yo,ws=c(20,30,40))
+#' par(mfrow=c(1,2))
 #' plot(ws20)
-#' pool<-SMW(yo=sim1o$yo,ws=c(20,30,40), n.rand=10)
-#' plot(pool,w.effect = TRUE)}
-
-
-
-
-
+#' plot(pool, w.effect=TRUE)
+#' }
 #' @rdname plot.smw
 #' @export
 plot.smw<-function(x, w=NULL, sig="z", z=1.85, BPs="max", seq.sig=3,w.effect=F,values=c("zscore","diss"), pchs=c(16,16,17),cols=c("black","red","blue"),bg=NULL,bg_alpha=0.1, wcols="rainbow", legend=TRUE,...){
@@ -53,6 +54,7 @@ plot.smw<-function(x, w=NULL, sig="z", z=1.85, BPs="max", seq.sig=3,w.effect=F,v
 ####
 DP<-function(input,w=NULL, sig="z", z=1.85, BPs="max", seq.sig=3,w.effect,values,pch=16, pchs,cols,bg,bg_alpha, wcols, legend,... )
 {
+
   index="dp"
   sig.def<-sig
   BPs.def<-BPs
@@ -142,7 +144,8 @@ DP<-function(input,w=NULL, sig="z", z=1.85, BPs="max", seq.sig=3,w.effect,values
       }
     } }
 
-
+  opar <- par(new = par("new"))
+  on.exit(par(opar))
   par(new=TRUE)
   do.call(plot,  c(list(x=x, y=y, xlim=x.limits, ylim=y.limits, pch=pchs[1], col=cols[1], ann=F, axes=F),plot.args))
   if(!is.null(sig.def)){do.call(points,  c(list(x=x.sig, y=y.sig, xlim=x.limits, ylim=y.limits, pch=pchs[2],col=cols[2]),args.default))}

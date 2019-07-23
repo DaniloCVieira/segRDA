@@ -4,7 +4,7 @@ Date: 2019-07-06
 Title: Modeling Non-Continuous Linear Responses of Ecological Data
 Author: Danilo C Vieira <vieiradc@yahoo.com.br>, Gustavo Fonseca <gfonseca.unifesp@gmail.com>, and Fabio Cop Ferreira <fabiocferreira.unifesp@gmail.com>, with contributions from Marco Colossi Brustolin.
 Maintainer: Danilo C Vieira <vieiradc@yahoo.com.br>
-Description: Tools for modeling non-continuous linear responses of ecological communities to environmental data through three steps: (1) data ordering (function 'OrdData'), (2) split-moving-window analysis (function 'SMW') and (3) piecewise redundancy analysis (function 'pwRDA').
+Description: Tools for modeling non-continuous linear responses of ecological communities to environmental data. The package is straightforward through three steps: (1) data ordering (function OrdData()), (2) split-moving-window analysis (function SMW()) and (3) piecewise redundancy analysis (function pwRDA()). Relevant references include Cornelius and Reynolds (1991) <doi:10.2307/1941559> and Legendre and Legendre (2012, ISBN: 9780444538697).
 Depends:
     R (>= 2.15),
     vegan (>= 2.4)

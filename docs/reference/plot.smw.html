@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segRDA </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -80,18 +80,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/segRDA.html">segRDA vignette </a>
-    </li>
-  </ul>
 </li>
       </ul>
       
@@ -223,14 +211,13 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sim1</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>sim1</span>)
 <span class='no'>sim1o</span><span class='kw'>&lt;-</span><span class='fu'>OrdData</span>(<span class='no'>sim1</span>$<span class='no'>envi</span>,<span class='no'>sim1</span>$<span class='no'>comm</span>)
-<span class='no'>ws20</span><span class='kw'>&lt;-</span><span class='fu'>SMW</span>(<span class='kw'>yo</span><span class='kw'>=</span><span class='no'>sim1o</span>$<span class='no'>yo</span>,<span class='kw'>ws</span><span class='kw'>=</span><span class='fl'>20</span>, <span class='kw'>n.rand</span><span class='kw'>=</span><span class='fl'>10</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>ws20</span>)
-<span class='no'>pool</span><span class='kw'>&lt;-</span><span class='fu'>SMW</span>(<span class='kw'>yo</span><span class='kw'>=</span><span class='no'>sim1o</span>$<span class='no'>yo</span>,<span class='kw'>ws</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>,<span class='fl'>30</span>,<span class='fl'>40</span>), <span class='kw'>n.rand</span><span class='kw'>=</span><span class='fl'>10</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>pool</span>,<span class='kw'>w.effect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='co'># }</span></pre>
+<span class='no'>ws50</span><span class='kw'>&lt;-</span><span class='fu'>SMW</span>(<span class='kw'>yo</span><span class='kw'>=</span><span class='no'>sim1o</span>$<span class='no'>yo</span>,<span class='kw'>ws</span><span class='kw'>=</span><span class='fl'>50</span>, <span class='kw'>n.rand</span><span class='kw'>=</span><span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'> SMW analysis (1/1); w =50</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==============                                                        |  20%  |                                                                              |============================                                          |  40%  |                                                                              |==========================================                            |  60%  |                                                                              |========================================================              |  80%  |                                                                              |======================================================================| 100%</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>ws50</span>)</div><div class='img'><img src='plot.smw-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='no'>pool</span><span class='kw'>&lt;-</span><span class='fu'>SMW</span>(<span class='kw'>yo</span><span class='kw'>=</span><span class='no'>sim1o</span>$<span class='no'>yo</span>,<span class='kw'>ws</span><span class='kw'>=</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>20</span>,<span class='fl'>30</span>,<span class='fl'>50</span>), <span class='kw'>n.rand</span><span class='kw'>=</span><span class='fl'>5</span>)</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'> SMW analysis (1/3); w =20</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==============                                                        |  20%  |                                                                              |============================                                          |  40%  |                                                                              |==========================================                            |  60%  |                                                                              |========================================================              |  80%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'> SMW analysis (2/3); w =30</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==============                                                        |  20%  |                                                                              |============================                                          |  40%  |                                                                              |==========================================                            |  60%  |                                                                              |========================================================              |  80%  |                                                                              |======================================================================| 100%</div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'> SMW analysis (3/3); w =50</span></div><div class='output co'>#&gt;   |                                                                              |                                                                      |   0%  |                                                                              |==============                                                        |  20%  |                                                                              |============================                                          |  40%  |                                                                              |==========================================                            |  60%  |                                                                              |========================================================              |  80%  |                                                                              |======================================================================| 100%</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.html'>plot</a></span>(<span class='no'>pool</span>,<span class='kw'>w.effect</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='plot.smw-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
