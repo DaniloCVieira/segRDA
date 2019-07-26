@@ -5,7 +5,7 @@
 #' @param y community matrix;
 #' @param axis the RDA axis in which the ordering should be based. Defaults to \code{axis=1}
 #' @param method standardization method (described in \code{\link[vegan]{decostand}}) to be applied on y before the RDA analysis. If \code{NA} (default), no transformation is performed.
-#' @param ... furhter parameters passed to \code{\link[vegan]{decostand}} and \code{\link[vegan]{rda}};
+#' @param ... furhter parameters passed to \code{\link[vegan]{decostand}} and \code{vegan::rda};
 #' @return An object of class \code{"ord"}, which is a list consisting of:
 #' \enumerate{
 #' \item{xo}: the ordered explanatory matrix

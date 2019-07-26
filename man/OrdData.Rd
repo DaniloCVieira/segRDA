@@ -15,7 +15,7 @@ OrdData(x, y, axis = 1, method = NA, ...)
 
 \item{method}{standardization method (described in \code{\link[vegan]{decostand}}) to be applied on y before the RDA analysis. If \code{NA} (default), no transformation is performed.}
 
-\item{...}{furhter parameters passed to \code{\link[vegan]{decostand}} and \code{\link[vegan]{rda}};}
+\item{...}{furhter parameters passed to \code{\link[vegan]{decostand}} and \code{vegan::rda};}
 }
 \value{
 An object of class \code{"ord"}, which is a list consisting of:
