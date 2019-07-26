@@ -34,32 +34,41 @@ devtools::install_github("DaniloCVieira/segRDA")
 
 ```
 
-The modeling process with `segRDA` is straightforward through three steps: **(1) data ordering** (function `OrdData`), **(2) split-moving-window analysis** (function `SMW`) and **(3) piecewise redundancy analysis** (function `pwRDA`). `segRDA` provides example data sets to facilitate reproducible examples. Through the following code we will use the dataset `sim3` from the package, which is a list composed of two matrices: `envi` and `comm`.
-
+The modeling process with `segRDA` is straightforward through three steps: **(1) data ordering** (function `OrdData`), **(2) split-moving-window analysis** (function `SMW`) and **(3) piecewise redundancy analysis** (function `pwRDA`). `segRDA` provides simualted and empirical datasets to facilitate reproducible examples. Each of these dataset is a list composed of two matrices: `envi` and `comm`. Through the following example code we will use the dataset `sim1` from the package. At the end of this document, we present the key running procedures for the empirical dataset `nema`. 
 
 ```{r }
-data(sim3) ##Simulated data
-x<-sim3$envi ## matrix of explanatory variables
-y<-sim3$comm ## matrix of response variables
+data(sim1) ##Simulated data
+x<-sim1$envi ## matrix of explanatory variables
+y<-sim1$comm ## matrix of response variables
 
 ```
 
 # Data ordering 
-Both the SMW and pwRDA analyses depend on ordered datasets. The ordering can be user-defined or generated using `OrdData` function. The latter is a wrapper for (1) performing a redundancy analysis using the `rda` function from `vegan` package and (2) ordering both response and explanatory matrices using one of the axes of the RDA model. Defaults to use the first RDA axis. `rda` arguments can be passed directly to the `OrdData` function.
-
+Both the SMW and pwRDA analyses depend on ordered datasets. The ordering can be user-defined or generated using `OrdData` function. The latter is a wrapper for (1) performing a redundancy analysis using the `rda` function from `vegan` package and (2) ordering both response and explanatory matrices using one of the axes of the RDA model. Defaults to use the first RDA axis. The function also allows the user to transform community data prior to RDA analysis. The transformation is specified by the argument `method`, which is further passed to the `decostand` function from `vegan`. Additional arguments from `rda` and `decostand`  can be passed directly to the `OrdData` function. 
 
 ```{r Data ordering}
-sim1o<-OrdData(x=x,y=y, axis=1)
-xo<-sim1o$xo ## ordered explanatory matrix
-yo<-sim1o$yo ## ordered response matrix
+sim1o<-OrdData(x=x,y=y, axis=1, method="hellinger")
 ```
 
+`OrdData` returns an object of class `ord`, which is a list consisting of:
+
+*	`..$xo `: the ordered explanatory matrix;
+*	`..$yo`: the ordered community matrix (untransformed);
+*	`..$x`: the original explanatory matrix;
+*	`..$y`: the original community matrix;
+
+```{r }
+xo<-sim1o$xo ## ordered explanatory matrix.
+yo<-sim1o$yo ## ordered community matrix (untransformed).
+```
+
+
 The resulting ordered community can be represented by a species-site interaction matrix using the function `image`, which is available from the stats package of R.
-```{r, fig.height=3, fig.width=6,fig.show='hold', tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+```{r, fig.height=3.5, fig.width=7,fig.show='hold', tidy=TRUE, tidy.opts=list(width.cutoff=70)}
 
 par(mfrow=c(1,2), mgp=c(1,1,0), cex=.9)
 image(y, main="Original community data", col=topo.colors(100), axes=F, xlab="Sites", ylab="Species abundance")
-image(yo, main="Ordered comunity data", col=topo.colors(100), axes=F, xlab="Sites")
+image(yo, main="Ordered comunity data", col=topo.colors(100), axes=F, xlab="Sites", ylab="Species abundance")
 ```
 
 # Split-moving window analysis
@@ -159,15 +168,15 @@ The `smw` object has a generic `plot` method, `plot.smw`. This command is a conv
 
 The background area of the graph can be coloured according to the breakpoints location (argument `bg`). These colors are  controled by the arguments `bg` and `bg_alpha`. The colors generated for each sample can be acessed through the command `bgDP(dp)` (where `dp` is an object of class `dp`). As we shall see later, this vector may be useful in the simultaneous visualization of the results the `SMW` and `pwRDA`. For the complete list of graphical parameters, please go to `help(plot.smw)`.
 
-```{r collapse=T,fig.height=3.5, fig.width=7,fig.show='hold'}
+```{r collapse=T,fig.height=3.5, fig.width=7,fig.show='hold', tidy=TRUE, tidy.opts=list(width.cutoff=70)}
 par(mfrow=c(1,2), cex=.9)
-plot(pool,w=20, main="DP from a single window (10)", cex.main=.8) 
+plot(pool,w=10, main="DP from a single window (10)", cex.main=.8) 
 plot(pool, main="DP from pooled windows (10, 20, 30 and 40)",  bg=c("rainbow"),cex.main=.8)
 ```
 
 A second type of plot is available for *pooled* `smw` objects: the window size effect. When the `smw` object is *pooled*  and the argument `w.effect` is `TRUE`, the `plot` method drawns together the profiles obtained from the different window sizes. 
 
-```{r collapse=TRUE,fig.height=4, fig.width=4,fig.show='hold'}
+```{r collapse=TRUE,fig.height=3.5, fig.width=3.5,fig.show='hold'}
 plot(pool, w.effect = TRUE, main="Window size effect")
 ```
 
@@ -185,21 +194,42 @@ The function returns an invisible list with following descriptors:
 * `..$summ`: a vector containing the summarized statistics.
 * `..$rda.0` and `..$rda.pw`:  the respectives `cca` objects from  the full and "pw"" RDA models. These objects can be used in all functions that applies to `vegan::cca.object`. More details for accessing and plotting a `cca.object` are in `help(cca.object)` and `help(plot.cca)`, respectivaly. 
 
-Finally, the color vector `bg` obtained from the command `plot.smw` can be used for a simultaneous view of the results of the `SMW` and `pwRDA` analyses.
+The command `bgDP` applied to the object returned by the fuction `plot.smw` returns the `bg` colors for each sample. It can be used for a simultaneous view of the results of the `SMW` and `pwRDA` analyses.  
 
-```{r fig.height=3, fig.width=9, collapse=TRUE,fig.show='hold'}
+
+```{r fig.height=2.34, fig.width=7, collapse=TRUE,fig.show='hold', tidy=TRUE, tidy.opts=list(width.cutoff=70)}
 head(pw.sim$summ)
-par(mfrow=c(1,3), cex=.75)
+par(mfrow=c(1,3), cex=.65)
 # plotting the full rda model:
 plot(pw.sim$rda.0, main="full RDA model", las=1)
-# plotting the DP profile and keeping the sample colors:
-dp<-plot(pool, main="DP from pooled windows \n (10, 20, 30 and 40)",  bg='rainbow',cex.main=.8)
+# plotting the DP profile and saving the output in an new object
+dp<-plot(pool, main="DP from pooled windows \n (10, 20, 30 and 40)",  bg=c("gold2", 'firebrick1'),cex.main=.8)
 
 # plotting the pwRDA colored according to the breakpoints:
 plot(pw.sim$rda.pw,type="n", scaling=3, main="pwRDA model")
 points(pw.sim$rda.pw, pch=16, col=bgDP(dp), cex=1.2)
 text(pw.sim$rda.pw,  display="bp",pch=16,col="steelblue4",lwd=2)
 ```
+
+
+# Running code for the empirical dataset `nema`.
+
+```{r eval=FALSE}
+
+  data(nema)
+# 1 - Data ordering  
+nemao<-OrdData(nema$envi,nema$comm, method="hell")
+
+#2 - SMW analysis
+nemapool<-SMW(yo=nemao$yo,ws=c(10,20,30,40,50,60,70))
+plot(nemapool)
+nema_bp<-bp(extract(nemapool))
+
+#3 - pwRDA analysis
+nemapw<-pwRDA(nemao$xo,decostand(nemao$yo,"hell"),BPs=nema_bp)
+
+```
+
 
 # Literature
 1. Burrough, P.A. (1986). Principles of Geographical Information Systems for Land Resources Assessment. Journal of Quaternary Sciencee, 193. 

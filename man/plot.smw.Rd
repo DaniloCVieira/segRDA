@@ -71,7 +71,6 @@ plot(pool)
 \donttest{
 ws20<-SMW(yo=sim1o$yo,ws=20)
 pool<-SMW(yo=sim1o$yo,ws=c(20,30,40))
-par(mfrow=c(1,2))
 plot(ws20)
 plot(pool, w.effect=TRUE)
 }

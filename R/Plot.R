@@ -40,7 +40,6 @@
 #' \donttest{
 #' ws20<-SMW(yo=sim1o$yo,ws=20)
 #' pool<-SMW(yo=sim1o$yo,ws=c(20,30,40))
-#' par(mfrow=c(1,2))
 #' plot(ws20)
 #' plot(pool, w.effect=TRUE)
 #' }
@@ -132,7 +131,6 @@ DP<-function(input,w=NULL, sig="z", z=1.85, BPs="max", seq.sig=3,w.effect,values
       if(!is.null(bg)) {
         if(length(bg)==1){bg.col<-get(get("bg"))(length(x.bp)+1)} else{bg.col=bg}
         cols.bp<-rep(bg.col, times=c(diff(c(0,x.bp,nrow(attr(dp.std, "params")$yo)))))
-        cols.bp<-adjustcolor(cols.bp, alpha.f = bg_alpha)
         lim <- par("usr")
         bc<-c(lim[1],x.bp,lim[2])
 

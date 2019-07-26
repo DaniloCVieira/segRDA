@@ -4,22 +4,24 @@
 \alias{OrdData}
 \title{Data ordering}
 \usage{
-OrdData(x, y, axis = 1, ...)
+OrdData(x, y, axis = 1, method = NA, ...)
 }
 \arguments{
 \item{x}{explanatory matrix;}
 
 \item{y}{community matrix;}
 
-\item{axis}{the RDA axis in which the ordering should be based. Defaults to \code{axis=1}.}
+\item{axis}{the RDA axis in which the ordering should be based. Defaults to \code{axis=1}}
 
-\item{...}{parameters passed to vegan::\code{\link[vegan]{cca}};}
+\item{method}{standardization method (described in \code{\link[vegan]{decostand}}) to be applied on y before the RDA analysis. If \code{NA} (default), no transformation is performed.}
+
+\item{...}{furhter parameters passed to \code{\link[vegan]{decostand}} and \code{\link[vegan]{rda}};}
 }
 \value{
 An object of class \code{"ord"}, which is a list consisting of:
 \enumerate{
 \item{xo}: the ordered explanatory matrix
-\item{yo}: the ordered community matrix
+\item{yo}: the ordered community matrix (non-transformed)
 \item{x}: the original explanatory matrix
 \item{y}: the original community matrix
 }
@@ -30,6 +32,7 @@ Ordinates both community and explanatory matrices based on the first RDA score.
 \examples{
 data(sim1)
 sim1.o<-OrdData(x=sim1$envi, y=sim1$comm)
+sim1.o<-OrdData(x=sim1$envi, y=sim1$comm, method="hellinger")
 }
 \author{
 Danilo Candido Vieira

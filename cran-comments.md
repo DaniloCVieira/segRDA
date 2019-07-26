@@ -7,4 +7,14 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* This is a resubmission. In this version (1.0.2) I have:
+
+* corrected the COPYRIGHT HOLDER 
+
+* removed par() from the examples
+
+* updated the function OrdData
+
+* updated the datasets included in the package
+
+* updated the vignette accordingly
