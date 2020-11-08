@@ -1,0 +1,14 @@
+Package: ecoML
+Version: 1.0.0
+Date: 2020-09-10
+Title: Machine learning routine for analysing ecological data
+Author: Danilo C Vieira <vieiradc@yahoo.com.br>, Gustavo Fonseca <gfonseca.unifesp@gmail.com>
+Maintainer: Danilo C Vieira <vieiradc@yahoo.com.br>
+Description: Tools for performing....
+Depends: R (>= 4.0)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.1
+Suggests: knitr, rmarkdown, testthat, kohonen, Rcpp
+VignetteBuilder: knitr
+URL: https://github.com/DaniloCVieira/ecoML

@@ -1,0 +1,225 @@
+---
+title: "EcoML: A wrap  for coupling Self-organizing maps and random forest to predict ecological spatial patterns"
+output:
+  html_document:
+    theme: readable
+    highlight: default
+    dev: png
+    toc: yes
+    toc_float: yes
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{ecoML}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r include=F}
+load('som.graphics')
+load('rf.graphics')
+library('vegan')
+library("sp")
+```
+
+This  wrapper combines two machine learning techniques to predict ecological spatial patterns. Given a set of predictor variables (X) and responses (Y), this tutorial uses the “self-organizing maps” technique to generate clusters of Y, and the random forest to predict these clusters from X.
+The package include example datasets from Araça Bay and PCRBs.
+
+To follow this tutorial, you will need at least three dataframes
+
+1. Dataframe containing response variable (in these example we will use nematodes density data (genus) from PCRBS.
+2. Dataframe containing the predictor variables
+3. Dataframe containing the coordinates
+
+Make sure that your data has unique rownames (sample IDs), and they are compatible across  response, predictor and coordinate dataframes. 
+
+The package EcoML also contains wrap functions to spatialize the data. You will need a SpatialPolygonData frame to interpolate results to a map. 
+
+About self-organizing maps 
+<br />
+ - https://towardsdatascience.com/kohonen-self-organizing-maps-a29040d688da
+ - https://towardsdatascience.com/self-organizing-maps-1b7d2a84e065
+ - https://www.superdatascience.com/blogs/the-ultimate-guide-to-self-organizing-maps-soms
+ - https://clarkdatalabs.github.io/soms/SOM_NBA
+
+```{r warning=FALSE,collapse = T, results='hide', message=F}
+#Load the ecoML package
+library(ecoML)
+```
+
+
+# **Self-Organizing Maps (SOM) for response matrix** 
+
+## Loading the data
+```{r warning=FALSE,collapse = T, results='hold'}
+data('nema_PCRBS') ### nematode genus dataframe from PCRBS
+data('coords_PCRBS') ### coordinates dataframe from PCRBS
+data("envi_PCRBS") ### environmental dataframe from PCRBS
+data("spd_PCRBS") ### SpatialPolygonDataFrame from PCRBS
+
+## Bellow, I am asking if the rownames from one dataframe is included in a second dataframe
+rownames(nema_PCRBS)%in%rownames(envi_PCRBS) 
+
+nrow(nema_PCRBS)
+nrow(coords_PCRBS) ## There are more coordinates than data. We need to separate coordinates respective to nematode data.
+
+coords_nema<-coords_PCRBS[rownames(nema_PCRBS),]
+nrow(coords_PCRBS)
+
+## we can transform the data
+nema_log<-decostand(nema_PCRBS,"log")
+
+```
+
+We will need to run this code to include BrayCurtis dissimilarity when performing SOM. 
+```{r BrayCurtis, collapse=T}
+
+source(list.files(paste(path.package("ecoML"),"include/", sep = "/"), full.names = T))
+
+
+## Números de taxon
+ncol(nema_log)
+
+## Números de Amostras
+nrow(nema_log)
+```
+
+## `wrapSOM` function
+
+The function to perform SOM is `wrapSOM`. This wrap calls the function `supersom` from `kohonen` package. More details in `help(supersom)`. In `wrapSOM`, the first argument is the response data (samples in lines x variables in columns. Currently this function works only with numerical data. You can set the distance measure `"BrayCurtis"`, `"euclidean"` and others measures described in `supersom`. 
+
+The `wrapSOM` automatically perform a hierarchical clustering using the function `hclust` from package `stats`. The  number of groups can be specified in the argument `groups`. If  `groups=NULL` (default), the function calculates several indices for determining the number of clusters and proposes to user the best clustering based on the that with the highest number of votes. More details in `help(NbClust)`.
+
+Use `help(wrapSOM)` to access details about all arguments.
+
+```{r collapse=T}
+somC<-wrapSOM(data=nema_log,dist=c("BrayCurtis"), seed=1,n_iterations = 1000)
+```
+
+
+The function returns a list of objects. Please go to `help(wrapSOM)` to more details.
+
+```{r }
+names(somC)
+```
+
+
+Inside the returned list, the object named "som.model"is of class `kohonen` and  can be used in all  functions available for this object class (`kononen` package)
+
+
+```{r }
+plot(somC$som.model, type="changes")
+```
+
+## `somInd` function
+
+We have implemented a way to plot a variable factor map. This kind of chart is very popular in principal component analysis (PCA), it is not usual in the Kohonen map context. It is based on coordinates (x, y) of each cell; their weights (number of instances), and the value for each variable from the codebook. As result, we have a pair of values for each variable, which are plotted together with the coodebook. There are no mathematical meanings to these calculations, especially since the topological map is supposed to be able to represent nonlinear patterns. Nevertheless, this kind of synthetic chart is otherwise easier to inspect than codebooks and heatmaps when the number of variables and nodes increases. 
+
+The variable factor map is generated by the function `somInd`. If the argument `indicate="cor"` (default), the function calculates the correlation of the variables with cells (weigthed by number of instances) and plot `npic` variables with the highest correlations, considering the different directions of the map, and invisibly returns the "indicator" variables and their respective pair of coordinates. It means that the function does not return the highest and lowest correlation as whole, but considers the highest and lowest values in each direction. To get results for all variables, set `npic` to be equal to the number of variables in the dataset.
+
+
+```{somInd collapse=T}
+ind<-somInd(somC$som.model,indicate="cor", npic=10)
+ind
+```
+
+
+Strong contrasts highlight the importance of variables in the definition of the different areas into the codebook charts. We can convey this idea using an indicator such as the variance. Thus, it is possible to rank the influence of the variables. When the argument `indicate="var"`, the `somInd ` function calculate the weighted variance for each variable (weighted by number of instances) and plot `npic` variables with the highest variances along the codebook chart. Variables with higher variances are those wich induced the strongest contrasts between the cells of the map. 
+
+```{r }
+ind<-somInd(somC$som.model,indicate="var", npic=10)
+```
+
+## `mapOne` function
+
+We can use the function `mapOne` to generate maps for a target variable .We need to set the argument `spd` (An object of class SpatialPolygonsDataFrame). All map functions available from `ecoML` package requires a `spd` object. In following examples we will use the shape of Santos Basin, which is available from the package `data(spd_PCRBS)`. The argument `get` can specifies the column or variable to be plotted. In following example, we settled the nematode genus "Sabatieria". 
+
+```{r }
+mapOne(nema_log,coords_nema, spd=spd_PCRBS,get="Sabatieria")
+```
+
+The mapping function available from `ecoML` also allows to modify interpolation parameters. Arguments from `gstat::idw` are passed further. More details in `help(idw)`. In the example bellow we will modify the argument `nmax`, which specifies the number of nearest observations that should be used for a kriging prediction .  
+
+```{r }
+mapOne(nema_log,coords_nema, spd=spd_PCRBS,get="Sabatieria", nmax=10) 
+mapOne(nema_log,coords_nema, spd=spd_PCRBS,get="Sabatieria", nmax=1) 
+```
+
+## `mapLoop` function
+
+We can create several maps using the function mapLoop. This function is usefull for plotting results from `somInd`. The argument `pic` sets the variables to plot, which can be a column vector or the string vector. 
+
+
+```{r warning=F,message=F}
+rownames(ind)
+maps_indicadores<-mapLoop(nema_log,coords = coords_nema,spd=spd_PCRBS, pic=rownames(ind))
+```
+
+The function returns a list with the recorded plots. Call individual objcts from the list to display the graphics.  
+```{r }
+names(maps_indicadores)
+maps_indicadores[[1]]
+maps_indicadores[["Acantholaimus"]]
+```
+
+## `votesPlot` function
+
+The function `votesPlot` plot the vote results on the best number of clusters.  
+
+```{r }
+votesPlot(somC)
+```
+
+## `mapClust` function
+
+You can use the function `mapClust` to generate a map with the predicted cluters. We will need set the argument `spd` (An object of class SpatialPolygonsDataFrame). In this example we will use the shape of Santos Basin, which is available from the package. 
+
+```{r message=F, warning=F}
+data("spd_PCRBS")
+class(spd_PCRBS)
+mapClust(somC,coords=coords_nema ,spd=spd_PCRBS)
+```
+
+All mapping functions allow to add one layer (`layer1`) of spatial polygons and 2 layers of spatial points (`layer2` and `layer3`). In this exaple, layer 1 will be the mainland and layer 2 the sample points. 
+
+```{r message=F, warning=F}
+mapClust(somC,coords=coords_nema ,spd=spd_PCRBS, layer1=cont_PCRBS, layer2=points_PCRBS)
+
+```
+
+## `exploreSOM` function
+
+An elegant way to generate all SOM results at once is to use `exploreSOM`. This is a wrap to generate a list with all graphics described so far.
+
+```{r message=F, warning=F}
+som.graphics<-exploreSOM(somC,coords_nema, spd=spd_PCRBS, layer1=cont_PCRBS, layer2=points_PCRBS, nmax=10)
+```
+
+# Random Forest
+
+## `wrapRF` function
+The function `wrapRF` is a wrap for performing repeated, cross-validated random forest analysis, using the clustering resutls from `wraSOM` to supervise for trainng the data. Please access `help(wrapRF)` for details about the arguments.
+
+```{r eval=F,message=F, warning=F}
+RF<-wrapRF(data=envi_PCRBS,somC=somC, prev.idw=T,seed=100,coords=coords_PCRBS, ntree=500)
+```
+
+## `exploreRF` function
+The fucntion `exploreRF` is similar to `exploreSOM`: it generates a list of graphical outputs, and also returns the variables that were significant for the random forest analysis. The `exploreRF` use as internal the \link{[https://cran.rstudio.com/web/packages/randomForestExplainer/vignettes/randomForestExplainer.html]{randomForestExplainer}} package. 
+
+```{r eval=F,message=F, warning=F}
+
+rf.graphics<-exploreRF(RF,somC,envi_PCRBS)
+
+## indicadores RF - Variáveis significantes
+rf_sigs<-rf.graphics$Sigs$variable 
+
+```
+
+
+## `ecoMLreport` function
+A intuitive way to explore the results from the analyses above is to use the function `ecoMLreport`. The function takes your som and random forest results and produces a html report(in a specified output directory) that summarizes all basic results obtained for the forest with the new package. If the output directory is not specified, the html file will be saved in the working directory.
+
+```{r eval=F, message=F, warning=F}
+ecoMLreport(som.graphics,rf.graphics)
+
+```

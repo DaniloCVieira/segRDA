@@ -1,0 +1,188 @@
+---
+title: "SOM, RF report"
+output:
+  html_document:
+    theme: readable
+    highlight: default
+    dev: png
+    toc: yes
+    toc_float: yes
+    number_sections: true
+
+---
+
+```{r include=F}
+library('cowplot')
+```
+
+
+# **SOM BIÓTICO:** 
+
+## Treinamento e Contagem
+
+<div class = "row">
+<div class = "col-md-6">
+```{r echo = F,  fig.width=5}
+som.graphics$changes
+```
+
+**Figura 1.2a - Processo de Treinamento. **
+</div>
+<div class = "col-md-6">
+```{r echo = F,  fig.width=5}
+som.graphics$counts
+```
+
+**Figura 1.2b - Contagem. ** Contagem de instâncias por célula.
+</div>
+</div>
+<br />
+<br />
+
+
+## SOMs - Correlações das variáveis influentes e BMU interpolado
+<div class = "row">
+<div class = "col-md-6">
+```{r echo = F,  fig.width=5}
+som.graphics$icell
+```
+
+**Figura 1.3a - Variáveis influentes. ** Variáveis que induziram os maiores contrastes entre as células do mapa. As setas indicam a direção  e a força da correlação entre as variáveis e as células. Os números indicam os rótulos do neurônios (NeuID).
+
+</div>
+<div class = "col-md-6">
+```{r echo = F, fig.width=5}
+  plot_grid(som.graphics[["SOMmap"]], scale=1.1)
+```
+
+**Figura 1.3b - Interpolação dos resultados do SOM na Bacia de Santos **. A interpolação é baseada na classificação de cada amostra ao longo da rede de nerônios (BMU - 'best unit matching".)
+</div>
+</div>
+
+
+## Indicadores SOM
+
+
+```{r echo = F, fig.width=10, fig.height=5, fig.align='center',results='hold',collapse = TRUE, warning=FALSE}
+for(i in 1:length(som.graphics$Ind_som))
+{
+  print(plot_grid(plotlist = list(som.graphics$Ind_som[[i]],som.graphics$Ind_map[[i]]),labels = paste0(letters[1:(length(som.graphics$Ind_som)*2)],")")[firstletters], ncol=2,scale=c(1,1), label_fontface = "plain"))
+  firstletters=firstletters+2
+  firstletters=firstletters+2
+}
+```
+**Figura 1.4. Indicadores SOM** Distribuição das variáveis ao longo do mapa de neurônios (painéis da esquerda) e sua respecitiva distribuição ao longo da Bacia de Santos (painéis da direita).
+
+
+## Análise de Agrupamento
+
+A regra da maioria é usada para identificar o melhor número de clusters. Pacote  [`NBclust`](https://www.jstatsoft.org/index.php/jss/article/view/v061i06/v61i06.pdf.)
+
+
+<div class = "row">
+<div class = "col-md-6">
+```{r echo = F,  fig.width=5, warning=FALSE}
+som.graphics$votes
+```
+
+**Figura 1.5a - Número de agrupamentos.** Votos sobre o número ideal de agrupamentos. 
+</div>
+<div class = "col-md-6">
+```{r echo = F,  fig.width=5, warning=FALSE}
+
+som.graphics$clust_cells
+```
+
+**Figura 1.5b - Agrupamentos dos neurônios.** 
+</div>
+</div>
+<br />
+<br />
+
+## Mapa dos habitats
+```{r echo = F,  fig.width=7, warning=FALSE}
+som.graphics$habs
+```
+
+**Figura 1.6 - Habitats. ** Interpolação dos Habitats previstos pelo SOM.
+
+## Índices univariados por habitat
+
+```{r echo = F, fig.width=10, fig.height=5, fig.align='center',results='hold',collapse = TRUE, warning=FALSE}
+for(i in 1:3)
+{
+  print(cowplot::plot_grid(plotlist=som.graphics$boxes[firstletters],labels =  paste0(letters[1:5],")")[firstletters], ncol=2,scale=c(.7)))
+  firstletters=firstletters+2
+  }
+
+
+```
+
+**Figura 1.7 - Índices Univariados ** Densidade (a), riqueza (b), diversidade de Shannown-Winner e Simpson (c e d) e equitabilidade.
+
+
+
+
+
+# **Random Forest**
+
+## Matriz de Confusão e Iimportância das variáveis
+<div class = "row">
+<div class = "col-md-6">
+```{r echo = F, , fig.width=6}
+rf.graphics[[1]]
+```
+
+**Figura 2.1a - Matriz de Confusão **
+</div>
+<div class = "col-md-6">
+```{r echo = F, fig.width=6}
+rf.graphics$RFexplainer[[1]]
+```
+
+
+
+**Figura 2.1b - Distribuição da profundidade mínima entre as árvores da floresta - ** A profundidade mínima de uma variável em uma árvore é igual à profundidade do nó que se divide nessa variável e é o mais próximo da raiz da árvore. Se for baixo, muitas observações são divididas em grupos com base nesta variável. Variáveis significativas são exibidas em vermelho (p<0.05). Este teste nos diz se o número observado de sucessos (número de nós em que cada variável foi usado para divisão) excede o número teórico de sucessos se eles fossem aleatórios.
+</div>
+</div>
+<br />
+<br />
+
+
+## Importância multivariada
+<div class = "row">
+<div class = "col-md-6">
+```{r echo = F, fig.width=5}
+rf.graphics$RFexplainer[[2]]
+```
+
+**Figura 2.2a - Importância multivariada** Este gráfico concentra-se em três medidas de importância derivadas da estrutura das árvores na floresta: (a) profundidade média da primeira divisão na variável, (b) número de árvores em que a raiz é dividida na variável e, (c) o número total de nós na floresta que se dividem nessa variável. 
+
+</div>
+<div class = "col-md-6">
+```{r echo = F, fig.width=5}
+rf.graphics$RFexplainer[[3]]
+```
+
+**Figura 2.2b - Importância multivariada**. Este gráfico mostra as medidas de importância que derivam do papel que uma variável desempenha na previsão: accuracy_decrease e gini_decrease mais informações adicionais sobre o valor p. Se uma variável é significativa significa que a variável é usada para dividir com mais frequência do que seria o caso se a seleção fosse aleatória.
+</div>
+</div>
+
+
+
+
+
+## Indicadores Random Forest
+```{r echo = F, fig.width=15, fig.height=5, fig.align='center',results='hold',collapse = TRUE}
+
+
+for(i in 1:(length(rf.graphics[firstletters[1]:length(rf.graphics)])/2))
+{
+  print(plot_grid(plotlist=list(rf.graphics$ind_rf[[firstletters[1]]],rf.graphics$ind_rf[[firstletters[2]]],som.graphics$habs),labels =c( paste0(letters[1:(length(rf.graphics$ind_rf))],")")[firstletters],""), ncol=3,scale=c(1)))
+  firstletters=firstletters+2
+  firstletters=firstletters+2
+  }
+
+```
+
+
